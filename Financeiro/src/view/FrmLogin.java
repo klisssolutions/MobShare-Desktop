@@ -13,21 +13,38 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.CardLayout;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
+
+import dao.ContaReceberDAO;
+import model.ContaReceber;
+import utils.GenericTableModel;
+
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 
 public class FrmLogin extends JFrame {
+	
+	
 
 	private JPanel contentPane;
 	private JPanel painelDinamico;
 	private JTextField txtUsuario;
 	private JPasswordField txtSenha;
 	private JTable tblContasReceber;
+	
+	ArrayList<?> listaContasReceber;
+	
+	ContaReceberDAO contaReceberDAO;
+	
+	
+	GenericTableModel modeloTabela;
+	JScrollPane scrollTabela;
 
 
 	public FrmLogin() {
@@ -39,6 +56,43 @@ public class FrmLogin extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+
+		
+		painelDinamico = new JPanel();
+		painelDinamico.setBackground(Color.WHITE);
+		painelDinamico.setBounds(0, 0, 679, 425);
+		contentPane.add(painelDinamico);
+		painelDinamico.setLayout(new CardLayout(0, 0));
+		
+		criarRodaPe();
+		criarPanelLogin();
+		
+
+	}
+	
+	public void iniciarTabela(String classe) {
+		
+		if (classe.equals("ContaReceber")) {
+			
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasReceber = new ArrayList<ContaReceber>();
+			
+			contaReceberDAO = new ContaReceberDAO(); 
+			
+			listaContasReceber = contaReceberDAO.listarContaReceber();
+			
+		
+			modeloTabela = new GenericTableModel(listaContasReceber, colunas, "ContaReceber");
+			
+			tblContasReceber = new JTable(modeloTabela);
+			
+			
+		}
+		
+	}
+	
+	public void criarRodaPe() {
 		JPanel painelRodaPe = new JPanel();
 		painelRodaPe.setBorder(new LineBorder(new Color(0, 0, 0)));
 		painelRodaPe.setBackground(Color.WHITE);
@@ -50,19 +104,9 @@ public class FrmLogin extends JFrame {
 		lblDesenvolvidoPorKliss.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblDesenvolvidoPorKliss.setBounds(246, 11, 200, 14);
 		painelRodaPe.add(lblDesenvolvidoPorKliss);
-		
-		painelDinamico = new JPanel();
-		painelDinamico.setBackground(Color.WHITE);
-		painelDinamico.setBounds(0, 0, 679, 425);
-		contentPane.add(painelDinamico);
-		painelDinamico.setLayout(new CardLayout(0, 0));
-		
-		criaraPanelLogin();
-		criarPainelHome();
-
 	}
 	
-	public void criaraPanelLogin(){
+	public void criarPanelLogin(){
 		JPanel painelLogin = new JPanel();
 		painelLogin.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		painelLogin.setBackground(Color.WHITE);
@@ -235,7 +279,7 @@ public class FrmLogin extends JFrame {
 		lblContasAReceber_1.setBounds(37, 11, 191, 14);
 		painelContasReceber.add(lblContasAReceber_1);
 		
-		tblContasReceber = new JTable();
+		tblContasReceber = new JTable(modeloTabela);
 		tblContasReceber.setBounds(37, 71, 425, 195);
 		painelContasReceber.add(tblContasReceber);
 	}

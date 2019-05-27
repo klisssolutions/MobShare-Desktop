@@ -1,0 +1,103 @@
+package utils;
+
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+
+import javax.swing.table.AbstractTableModel;
+
+
+
+public class GenericTableModel extends AbstractTableModel{
+
+	ArrayList<?> listaObjetos;
+	ArrayList<String> nomecolunas; 
+	String nomeClasse;
+
+
+	public GenericTableModel(ArrayList<?> listaObjetos , ArrayList<String> colunas, String nomeClasse){
+
+		this.listaObjetos = listaObjetos;
+		this.nomecolunas = colunas;
+		
+		this.nomeClasse = nomeClasse;
+		
+	}
+
+
+	@Override
+	public int getColumnCount(){
+		
+		return nomecolunas.size();
+	}
+
+	@Override
+	public int getRowCount() {
+		
+		return listaObjetos.size();
+	}
+
+	@Override
+	public Object getValueAt(int linhas, int colunas) {
+			
+			
+		
+		if(nomeClasse.equals("FUNCIONARIO")){
+			FUNCIONARIO f = (FUNCIONARIO) listaObjetos.get(linhas);
+			
+			if(colunas == 0){
+				return f.getID_FUNCIONARIO();			
+			}else if(colunas == 1){
+				return f.getNOME_FUNCIONARIO();
+			}else if(colunas == 2){
+				return f.getCARGO();
+			}else if(colunas == 3){
+				return f.getLOCAL().getNOME_LOCAL();
+			}else if(colunas == 4){
+				return f.getLOCAL().getEMPRESA().getNOME_EMPRESA();
+			}			
+		}else if(nomeClasse.equals("EQUIPAMENTO")){
+			
+			EQUIPAMENTO e = (EQUIPAMENTO) listaObjetos.get(linhas);
+			
+			if(colunas ==0 ){
+				return e.getSERIAL();
+			}else if(colunas == 1){
+				return e.getNOME_EQUIPAMENTO();
+				
+			}else if(colunas == 2){
+				return e.getMARCA();
+			}else if(colunas == 3){
+				return e.getMODELO();
+			}else if(colunas == 4){
+				return e.getFUNCIONANDO();
+			}
+		}
+
+
+		return "";
+		
+		
+		
+	}
+	
+	@Override
+	public String getColumnName(int column){//apropria tabela que /
+	//chama esse metodo passando o numero de colunas, desenvolvedor nao chama esse metodo
+		
+		for(int i = 0; i <= column; i++){
+			if(column == i){
+				return nomecolunas.get(i);
+			}
+		}
+		
+		
+		return "";
+		
+	}
+	
+	public void dadoInserido(Object objeto){
+		this.fireTableRowsInserted(0, listaObjetos.size());
+	}
+	
+
+}

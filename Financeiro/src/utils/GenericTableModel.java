@@ -5,16 +5,18 @@ import java.util.ArrayList;
 
 import javax.swing.table.AbstractTableModel;
 
+import model.ContaReceber;
+
 
 
 public class GenericTableModel extends AbstractTableModel{
 
 	ArrayList<?> listaObjetos;
-	ArrayList<String> nomecolunas; 
+	String[] nomecolunas; 
 	String nomeClasse;
 
 
-	public GenericTableModel(ArrayList<?> listaObjetos , ArrayList<String> colunas, String nomeClasse){
+	public GenericTableModel(ArrayList<?> listaObjetos , String[] colunas, String nomeClasse){
 
 		this.listaObjetos = listaObjetos;
 		this.nomecolunas = colunas;
@@ -27,7 +29,7 @@ public class GenericTableModel extends AbstractTableModel{
 	@Override
 	public int getColumnCount(){
 		
-		return nomecolunas.size();
+		return nomecolunas.length;
 	}
 
 	@Override
@@ -41,36 +43,34 @@ public class GenericTableModel extends AbstractTableModel{
 			
 			
 		
-		if(nomeClasse.equals("FUNCIONARIO")){
-			FUNCIONARIO f = (FUNCIONARIO) listaObjetos.get(linhas);
+		if(nomeClasse.equals("ContaReceber")){
+			ContaReceber cb = (ContaReceber) listaObjetos.get(linhas);
 			
 			if(colunas == 0){
-				return f.getID_FUNCIONARIO();			
+				return cb.getIdConta_Receber();
 			}else if(colunas == 1){
-				return f.getNOME_FUNCIONARIO();
+				return cb.getValor();
 			}else if(colunas == 2){
-				return f.getCARGO();
+				return cb.getNomeBanco();
 			}else if(colunas == 3){
-				return f.getLOCAL().getNOME_LOCAL();
-			}else if(colunas == 4){
-				return f.getLOCAL().getEMPRESA().getNOME_EMPRESA();
+				return cb.getVencimento();
 			}			
 		}else if(nomeClasse.equals("EQUIPAMENTO")){
-			
-			EQUIPAMENTO e = (EQUIPAMENTO) listaObjetos.get(linhas);
-			
-			if(colunas ==0 ){
-				return e.getSERIAL();
-			}else if(colunas == 1){
-				return e.getNOME_EQUIPAMENTO();
-				
-			}else if(colunas == 2){
-				return e.getMARCA();
-			}else if(colunas == 3){
-				return e.getMODELO();
-			}else if(colunas == 4){
-				return e.getFUNCIONANDO();
-			}
+//			
+//			EQUIPAMENTO e = (EQUIPAMENTO) listaObjetos.get(linhas);
+//			
+//			if(colunas ==0 ){
+//				return e.getSERIAL();
+//			}else if(colunas == 1){
+//				return e.getNOME_EQUIPAMENTO();
+//				
+//			}else if(colunas == 2){
+//				return e.getMARCA();
+//			}else if(colunas == 3){
+//				return e.getMODELO();
+//			}else if(colunas == 4){
+//				return e.getFUNCIONANDO();
+//			}
 		}
 
 
@@ -86,7 +86,7 @@ public class GenericTableModel extends AbstractTableModel{
 		
 		for(int i = 0; i <= column; i++){
 			if(column == i){
-				return nomecolunas.get(i);
+				return nomecolunas[i];
 			}
 		}
 		
