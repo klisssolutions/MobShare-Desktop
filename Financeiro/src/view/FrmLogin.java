@@ -66,6 +66,7 @@ public class FrmLogin extends JFrame {
 		
 		criarRodaPe();
 		criarPanelLogin();
+		criarPainelHome();
 		
 
 	}
@@ -82,7 +83,8 @@ public class FrmLogin extends JFrame {
 			
 			listaContasReceber = contaReceberDAO.listarContaReceber();
 			
-		
+		 
+			
 			modeloTabela = new GenericTableModel(listaContasReceber, colunas, "ContaReceber");
 			
 			tblContasReceber = new JTable(modeloTabela);
@@ -140,6 +142,9 @@ public class FrmLogin extends JFrame {
 		JButton btnLogar = new JButton("Logar");
 		btnLogar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
+				CardLayout c = (CardLayout) (painelDinamico.getLayout());
+				c.show(painelDinamico, "home");
 			}
 		});
 		btnLogar.setBounds(255, 197, 89, 23);
@@ -151,7 +156,7 @@ public class FrmLogin extends JFrame {
 	public void criarPainelHome(){
 		JPanel painelHome = new JPanel();
 		painelHome.setBackground(Color.WHITE);
-		painelDinamico.add(painelHome, "name_65489554860452");
+		painelDinamico.add(painelHome, "home");
 		painelHome.setLayout(null);
 		
 		JPanel painelCabecalhoHome = new JPanel();
@@ -280,7 +285,11 @@ public class FrmLogin extends JFrame {
 		painelContasReceber.add(lblContasAReceber_1);
 		
 		tblContasReceber = new JTable(modeloTabela);
+
 		tblContasReceber.setBounds(37, 71, 425, 195);
 		painelContasReceber.add(tblContasReceber);
+		
+		
+		iniciarTabela("ContaReceber");
 	}
 }

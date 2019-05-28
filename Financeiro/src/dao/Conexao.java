@@ -13,8 +13,11 @@ public class Conexao {
 		con = null;
 		
 		try{
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost/mydb";
+			//Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+
+			String url = "jdbc:mysql://localhost:3306/mydb?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC";
 			con =  DriverManager.getConnection(url, "root", "bcd127");
 			System.out.print("Conectado");
 		}catch(Exception e){
