@@ -23,7 +23,7 @@ public class ContaReceberDAO {
 	
 	
 	public ArrayList<ContaReceber> listarContaReceber(){
-		
+		System.out.print("bbbb");
 		
 		listaContaReceber = new ArrayList<ContaReceber>();
 		String sql = "select * from v_conta_receber";
@@ -38,7 +38,7 @@ public class ContaReceberDAO {
 				contaReceber.setVencimento(rs.getDate("vencimento"));
 				contaReceber.setIdBanco(rs.getInt("idBanco"));
 				
-				//System.out.print(contaReceber.getNomeBanco());
+				System.out.print(contaReceber.getNomeBanco());
 				
 				
 				listaContaReceber.add(contaReceber);

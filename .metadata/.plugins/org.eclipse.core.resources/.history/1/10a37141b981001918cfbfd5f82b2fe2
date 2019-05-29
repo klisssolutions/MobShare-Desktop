@@ -17,7 +17,7 @@ public class GenericTableModel extends AbstractTableModel{
 
 
 	public GenericTableModel(ArrayList<?> listaObjetos , String[] colunas, String nomeClasse){
-		
+
 		this.listaObjetos = listaObjetos;
 		this.nomecolunas = colunas;
 		
@@ -44,7 +44,6 @@ public class GenericTableModel extends AbstractTableModel{
 			
 		
 		if(nomeClasse.equals("ContaReceber")){
-			
 			ContaReceber cb = (ContaReceber) listaObjetos.get(linhas);
 			
 			if(colunas == 0){

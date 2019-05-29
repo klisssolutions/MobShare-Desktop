@@ -18,7 +18,6 @@ public class ContaReceberDAO {
 	
 	public ContaReceberDAO() {
 		con = new Conexao().getConexao();
-		
 	}
 	
 	
@@ -38,7 +37,7 @@ public class ContaReceberDAO {
 				contaReceber.setVencimento(rs.getDate("vencimento"));
 				contaReceber.setIdBanco(rs.getInt("idBanco"));
 				
-				//System.out.print(contaReceber.getNomeBanco());
+				System.out.print(contaReceber.getNomeBanco());
 				
 				
 				listaContaReceber.add(contaReceber);

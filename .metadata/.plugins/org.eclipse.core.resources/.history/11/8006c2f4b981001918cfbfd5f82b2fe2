@@ -20,7 +20,7 @@ public class GenericTableModel extends AbstractTableModel{
 		
 		this.listaObjetos = listaObjetos;
 		this.nomecolunas = colunas;
-		
+		System.out.println(colunas[0]);
 		this.nomeClasse = nomeClasse;
 		
 	}

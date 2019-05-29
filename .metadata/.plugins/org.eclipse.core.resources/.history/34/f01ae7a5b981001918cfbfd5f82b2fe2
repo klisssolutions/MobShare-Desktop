@@ -17,7 +17,7 @@ public class GenericTableModel extends AbstractTableModel{
 
 
 	public GenericTableModel(ArrayList<?> listaObjetos , String[] colunas, String nomeClasse){
-		
+		System.out.println("nfstd");
 		this.listaObjetos = listaObjetos;
 		this.nomecolunas = colunas;
 		
