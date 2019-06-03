@@ -1,0 +1,456 @@
+package view;
+
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import java.awt.Color;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.Font;
+import java.awt.CardLayout;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.TitledBorder;
+
+import dao.ContaPagarDAO;
+import dao.ContaReceberDAO;
+import model.ContaPagar;
+import model.ContaReceber;
+import utils.GenericTableModel;
+
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.LineBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
+import javax.swing.JTable;
+
+public class FrmLogin extends JFrame {
+	
+	
+
+	CardLayout c;
+	CardLayout cc;
+	
+	JPanel painelConteudoDinamico;
+	
+	JPanel painelFluxoDeCaixa;
+	
+	JTable tblContasPagar;
+	
+	private JPanel contentPane;
+	private JPanel painelDinamico;
+	private JTextField txtUsuario;
+	private JPasswordField txtSenha;
+	private JTable tblContasReceber;
+	
+	ArrayList<?> listaContasReceber;
+	ArrayList<?> listaContasPagar;
+	
+	ContaReceberDAO contaReceberDAO;
+	
+	ContaPagar contaPagar;
+	ContaReceber contaReceber;
+	ContaPagarDAO contaPagarDAO;
+	
+	GenericTableModel modeloTabela;
+	JScrollPane scrollTabela;
+	private JTable tabelaEntrada;
+	private JTable tabelaSaida;
+
+
+	public FrmLogin() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 880, 522);
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+
+		
+		painelDinamico = new JPanel();
+		painelDinamico.setBackground(Color.WHITE);
+		painelDinamico.setBounds(0, 0, 864, 436);
+		contentPane.add(painelDinamico);
+		painelDinamico.setLayout(new CardLayout(0, 0));
+		
+		
+		criarRodaPe();
+		criarPanelLogin();
+		criarPainelHome();
+		
+
+	}
+	
+	public void iniciarTabela(String classe) {
+		
+		
+		if (classe.equals("ContaReceber")) {
+			
+			
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasReceber = new ArrayList<ContaReceber>();
+			
+			contaReceberDAO = new ContaReceberDAO(); 
+			
+			listaContasReceber = contaReceberDAO.listarContaReceber();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasReceber, colunas, "ContaReceber");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tblContasReceber.setModel(modeloTabela);
+			
+
+			
+		} else if(classe.equals("Saida")){
+				
+			
+			
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasPagar = new ArrayList<ContaPagar>();
+			
+			contaPagarDAO = new ContaPagarDAO(); 
+			
+			listaContasPagar = contaPagarDAO.listarSaida();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasPagar, colunas, "ContaPagar");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tabelaSaida.setModel(modeloTabela);
+			
+
+			
+		} else if(classe.equals("ContaPagar")){
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasPagar = new ArrayList<ContaPagar>();
+			
+			contaPagarDAO = new ContaPagarDAO(); 
+			
+			listaContasPagar = contaPagarDAO.listarContaPagar();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasPagar, colunas, "ContaPagar");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tblContasPagar.setModel(modeloTabela);
+		}
+		
+	}
+	
+	public void criarRodaPe() {
+		JPanel painelRodaPe = new JPanel();
+		painelRodaPe.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelRodaPe.setBackground(Color.WHITE);
+		painelRodaPe.setBounds(0, 436, 864, 47);
+		contentPane.add(painelRodaPe);
+		painelRodaPe.setLayout(null);
+		
+		JLabel lblDesenvolvidoPorKliss = new JLabel("Desenvolvido por Kliss Solutions");
+		lblDesenvolvidoPorKliss.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblDesenvolvidoPorKliss.setBounds(353, 11, 200, 14);
+		painelRodaPe.add(lblDesenvolvidoPorKliss);
+	}
+	
+	public void criarPanelLogin(){
+		JPanel painelLogin = new JPanel();
+		painelLogin.setBorder(new TitledBorder(null, "Login", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		painelLogin.setBackground(Color.WHITE);
+		painelDinamico.add(painelLogin, "login");
+		painelLogin.setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(null);
+		panel.setBackground(Color.WHITE);
+		panel.setBounds(282, 86, 381, 231);
+		painelLogin.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblUsuario = new JLabel("Usuario:");
+		lblUsuario.setBounds(24, 65, 57, 14);
+		panel.add(lblUsuario);
+		
+		txtUsuario = new JTextField();
+		txtUsuario.setBounds(34, 90, 310, 20);
+		panel.add(txtUsuario);
+		txtUsuario.setColumns(10);
+		
+		JLabel lblSenha = new JLabel("Senha:");
+		lblSenha.setBounds(24, 121, 46, 14);
+		panel.add(lblSenha);
+		
+		txtSenha = new JPasswordField();
+		txtSenha.setBounds(34, 149, 310, 20);
+		panel.add(txtSenha);
+		
+		JButton btnLogar = new JButton("Logar");
+		
+		btnLogar.setBounds(255, 197, 89, 23);
+		panel.add(btnLogar);
+		
+		btnLogar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				c.show(painelDinamico, "home");		
+				cc.show(painelConteudoDinamico, "painelInicial");
+			}
+		});
+
+	}
+	
+	public void criarPainelHome(){
+		JPanel painelHome = new JPanel();
+		painelHome.setBackground(Color.WHITE);
+		painelDinamico.add(painelHome, "home");
+		painelHome.setLayout(null);
+		
+		JPanel painelCabecalhoHome = new JPanel();
+		painelCabecalhoHome.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelCabecalhoHome.setBackground(Color.WHITE);
+		painelCabecalhoHome.setBounds(0, 0, 864, 52);
+		painelHome.add(painelCabecalhoHome);
+		painelCabecalhoHome.setLayout(null);
+		
+		JPanel painelMenu = new JPanel();
+		painelMenu.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelMenu.setBackground(Color.WHITE);
+		painelMenu.setBounds(0, 51, 145, 386);
+		painelHome.add(painelMenu);
+		painelMenu.setLayout(null);
+		
+		JPanel painelOptContaReceber = new JPanel();
+		painelOptContaReceber.setLayout(null);
+		painelOptContaReceber.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptContaReceber.setBackground(Color.WHITE);
+		painelOptContaReceber.setBounds(0, 0, 145, 44);
+		painelMenu.add(painelOptContaReceber);
+		
+		c = (CardLayout) (painelDinamico.getLayout());
+
+		
+		painelOptContaReceber.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "contaReceber");
+				
+				iniciarTabela("ContaReceber");
+				super.mouseClicked(e);
+			}
+		});
+		
+		
+		JLabel lblContasAReceber = new JLabel("Contas a Receber");
+		lblContasAReceber.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblContasAReceber.setBounds(25, 11, 110, 22);
+		painelOptContaReceber.add(lblContasAReceber);
+		
+		JPanel painelOptContaPagar = new JPanel();
+		painelOptContaPagar.setLayout(null);
+		painelOptContaPagar.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptContaPagar.setBackground(Color.WHITE);
+		painelOptContaPagar.setBounds(0, 48, 145, 44);
+		painelMenu.add(painelOptContaPagar);
+		
+		painelOptContaPagar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "painelContaPagar");
+				
+				iniciarTabela("ContaPagar");
+				super.mouseClicked(e);
+			}
+		});
+		
+		JLabel lblContasAPagar = new JLabel("Contas a Pagar");
+		lblContasAPagar.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblContasAPagar.setBounds(25, 11, 110, 22);
+		painelOptContaPagar.add(lblContasAPagar);
+		
+		JPanel painelOptFluxoDeCaixa = new JPanel();
+		painelOptFluxoDeCaixa.setLayout(null);
+		painelOptFluxoDeCaixa.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptFluxoDeCaixa.setBackground(Color.WHITE);
+		painelOptFluxoDeCaixa.setBounds(0, 94, 145, 44);
+		painelMenu.add(painelOptFluxoDeCaixa);
+		
+		painelOptFluxoDeCaixa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "painelFluxoDeCaixa");
+				
+				iniciarTabela("Saida");
+				super.mouseClicked(e);
+			}
+		});
+		
+		JLabel lblFluxoDeCaixa = new JLabel("Fluxo de Caixa");
+		lblFluxoDeCaixa.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFluxoDeCaixa.setBounds(25, 11, 110, 14);
+		painelOptFluxoDeCaixa.add(lblFluxoDeCaixa);
+		
+		painelConteudoDinamico = new JPanel();
+		painelConteudoDinamico.setBackground(Color.WHITE);
+		painelConteudoDinamico.setBounds(156, 65, 708, 349);
+		painelHome.add(painelConteudoDinamico);
+		painelConteudoDinamico.setLayout(new CardLayout(0, 0));
+		
+		criarPainelContaReceber();
+		
+		//painelContasReceber.add(tblContasReceber);
+		
+		JPanel painelInicial = new JPanel();
+		painelInicial.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelInicial, "painelInicial");
+		painelInicial.setLayout(null);
+		
+		JLabel lblBemVindo = new JLabel("Bem Vindo");
+		lblBemVindo.setBounds(356, 181, 75, 14);
+		painelInicial.add(lblBemVindo);
+		
+		criarPainelContaPagar();
+		
+		criarPainelFluxoDeCaixa();
+		
+	}
+	
+	
+	public void criarPainelContaPagar(){
+		
+		JPanel painelContaPagar = new JPanel();
+		painelContaPagar.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelContaPagar, "painelContaPagar");
+		painelContaPagar.setLayout(null);
+		
+		JLabel lblContasAPagar_1 = new JLabel("Contas a Pagar");
+		lblContasAPagar_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblContasAPagar_1.setBounds(37, 11, 191, 14);
+		painelContaPagar.add(lblContasAPagar_1);
+		
+		tblContasPagar = new JTable();
+		tblContasPagar.setBackground(Color.WHITE);
+
+		tblContasPagar.setBounds(37, 71, 425, 195);
+		
+		scrollTabela = new JScrollPane(tblContasPagar);
+		
+		scrollTabela.setVisible(true);
+		scrollTabela.setBounds(140, 56, 425, 195);
+		
+		painelContaPagar.add(scrollTabela);
+		
+		JButton btnPagar = new JButton("Baixar");
+		btnPagar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Boolean result;
+				contaPagar = (ContaPagar) listaContasPagar.get(tblContasPagar.getSelectedRow());
+				
+				contaPagarDAO = new ContaPagarDAO();
+				result = contaPagarDAO.pagarConta(contaPagar.getIdConta_Pagar());
+				
+			
+			}
+		});
+		btnPagar.setBounds(476, 274, 89, 23);
+		painelContaPagar.add(btnPagar);
+		
+		
+	}
+	
+	
+	public void criarPainelFluxoDeCaixa(){
+		
+		painelFluxoDeCaixa = new JPanel();
+		painelFluxoDeCaixa.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelFluxoDeCaixa, "painelFluxoDeCaixa");
+		painelFluxoDeCaixa.setLayout(null);
+		
+		JLabel lblContasAReceber_1 = new JLabel("Fluxo de Caixa");
+		lblContasAReceber_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblContasAReceber_1.setBounds(20, 30, 108, 17);
+		painelFluxoDeCaixa.add(lblContasAReceber_1);
+		
+		JLabel lblEntrada = new JLabel("Entrada");
+		lblEntrada.setBounds(20, 70, 46, 14);
+		painelFluxoDeCaixa.add(lblEntrada);
+		
+		JLabel lblSda = new JLabel("Sa\u00EDda");
+		lblSda.setBounds(375, 70, 46, 14);
+		painelFluxoDeCaixa.add(lblSda);
+		
+		JScrollPane scrollTabelaEntrada = new JScrollPane();
+		scrollTabelaEntrada.setBounds(20, 95, 323, 170);
+		painelFluxoDeCaixa.add(scrollTabelaEntrada);
+		
+		tabelaEntrada = new JTable();
+		scrollTabelaEntrada.setColumnHeaderView(tabelaEntrada);
+		
+		JScrollPane scrollTabelaSaida = new JScrollPane();
+		scrollTabelaSaida.setBounds(375, 95, 323, 170);
+		painelFluxoDeCaixa.add(scrollTabelaSaida);
+		
+		tabelaSaida = new JTable();
+		scrollTabelaSaida.setViewportView(tabelaSaida);
+		
+		
+	}
+	
+	
+	
+	public void criarPainelContaReceber(){
+		cc = (CardLayout) (painelConteudoDinamico.getLayout());
+		
+		JPanel painelContasReceber = new JPanel();
+		painelContasReceber.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelContasReceber, "contaReceber");
+		painelContasReceber.setLayout(null);
+		
+		JLabel lblContasAReceber_1 = new JLabel("Contas a Receber");
+		lblContasAReceber_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblContasAReceber_1.setBounds(37, 11, 191, 14);
+		painelContasReceber.add(lblContasAReceber_1);
+		
+		tblContasReceber = new JTable();
+
+		tblContasReceber.setBounds(37, 71, 425, 195);
+		
+		scrollTabela = new JScrollPane(tblContasReceber);
+		scrollTabela.setVisible(true);
+		scrollTabela.setBounds(154, 68, 425, 195);
+		
+		painelContasReceber.add(scrollTabela);
+		
+		JButton btnReceber = new JButton("Baixar");
+		btnReceber.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Boolean result;
+				contaReceber = (ContaReceber) listaContasReceber.get(tblContasReceber.getSelectedRow());
+				
+				contaReceberDAO = new ContaReceberDAO();
+				result = contaReceberDAO.receberConta(contaReceber.getIdConta_Receber());
+				
+				
+				
+			}
+		});
+		btnReceber.setBounds(490, 275, 89, 23);
+		painelContasReceber.add(btnReceber);
+	}
+}

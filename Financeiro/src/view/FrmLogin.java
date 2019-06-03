@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -17,21 +18,36 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 
+import dao.ContaPagarDAO;
 import dao.ContaReceberDAO;
+import model.ContaPagar;
 import model.ContaReceber;
 import utils.GenericTableModel;
 
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
+import java.awt.Label;
+import javax.swing.ImageIcon;
 
 public class FrmLogin extends JFrame {
 	
 	
 
+	CardLayout c;
+	CardLayout cc;
+	
+	JPanel painelConteudoDinamico;
+	
+	JPanel painelFluxoDeCaixa;
+	
+	JTable tblContasPagar;
+	
 	private JPanel contentPane;
 	private JPanel painelDinamico;
 	private JTextField txtUsuario;
@@ -39,17 +55,23 @@ public class FrmLogin extends JFrame {
 	private JTable tblContasReceber;
 	
 	ArrayList<?> listaContasReceber;
+	ArrayList<?> listaContasPagar;
 	
 	ContaReceberDAO contaReceberDAO;
 	
+	ContaPagar contaPagar;
+	ContaReceber contaReceber;
+	ContaPagarDAO contaPagarDAO;
 	
 	GenericTableModel modeloTabela;
 	JScrollPane scrollTabela;
+	private JTable tabelaEntrada;
+	private JTable tabelaSaida;
 
 
 	public FrmLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 695, 522);
+		setBounds(100, 100, 880, 522);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -60,9 +82,10 @@ public class FrmLogin extends JFrame {
 		
 		painelDinamico = new JPanel();
 		painelDinamico.setBackground(Color.WHITE);
-		painelDinamico.setBounds(0, 0, 679, 425);
+		painelDinamico.setBounds(0, 0, 864, 436);
 		contentPane.add(painelDinamico);
 		painelDinamico.setLayout(new CardLayout(0, 0));
+		
 		
 		criarRodaPe();
 		criarPanelLogin();
@@ -72,6 +95,7 @@ public class FrmLogin extends JFrame {
 	}
 	
 	public void iniciarTabela(String classe) {
+		
 		
 		if (classe.equals("ContaReceber")) {
 			
@@ -90,6 +114,61 @@ public class FrmLogin extends JFrame {
 			//tblContasReceber = new JTable(modeloTabela);
 			tblContasReceber.setModel(modeloTabela);
 			
+
+			
+		} else if (classe.equals("Entrada")) {
+			
+			
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasReceber = new ArrayList<ContaReceber>();
+			
+			contaReceberDAO = new ContaReceberDAO(); 
+			
+			listaContasReceber = contaReceberDAO.listarEntrada();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasReceber, colunas, "ContaReceber");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tabelaEntrada.setModel(modeloTabela);
+			
+
+			
+		} else if(classe.equals("Saida")){
+				
+			
+			
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasPagar = new ArrayList<ContaPagar>();
+			
+			contaPagarDAO = new ContaPagarDAO(); 
+			
+			listaContasPagar = contaPagarDAO.listarSaida();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasPagar, colunas, "ContaPagar");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tabelaSaida.setModel(modeloTabela);
+			
+
+			
+		} else if(classe.equals("ContaPagar")){
+			String[] colunas = {"ID", "VALOR", "VENCIMENTO", "BANCO"}; 
+			
+			listaContasPagar = new ArrayList<ContaPagar>();
+			
+			contaPagarDAO = new ContaPagarDAO(); 
+			
+			listaContasPagar = contaPagarDAO.listarContaPagar();
+			
+			
+			modeloTabela = new GenericTableModel(listaContasPagar, colunas, "ContaPagar");
+			
+			//tblContasReceber = new JTable(modeloTabela);
+			tblContasPagar.setModel(modeloTabela);
 		}
 		
 	}
@@ -98,13 +177,13 @@ public class FrmLogin extends JFrame {
 		JPanel painelRodaPe = new JPanel();
 		painelRodaPe.setBorder(new LineBorder(new Color(0, 0, 0)));
 		painelRodaPe.setBackground(Color.WHITE);
-		painelRodaPe.setBounds(0, 436, 679, 47);
+		painelRodaPe.setBounds(0, 436, 864, 47);
 		contentPane.add(painelRodaPe);
 		painelRodaPe.setLayout(null);
 		
 		JLabel lblDesenvolvidoPorKliss = new JLabel("Desenvolvido por Kliss Solutions");
 		lblDesenvolvidoPorKliss.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDesenvolvidoPorKliss.setBounds(246, 11, 200, 14);
+		lblDesenvolvidoPorKliss.setBounds(353, 11, 200, 14);
 		painelRodaPe.add(lblDesenvolvidoPorKliss);
 	}
 	
@@ -118,7 +197,7 @@ public class FrmLogin extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBorder(null);
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(175, 63, 381, 231);
+		panel.setBounds(282, 86, 381, 231);
 		painelLogin.add(panel);
 		panel.setLayout(null);
 		
@@ -140,19 +219,18 @@ public class FrmLogin extends JFrame {
 		panel.add(txtSenha);
 		
 		JButton btnLogar = new JButton("Logar");
-		btnLogar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-				CardLayout c = (CardLayout) (painelDinamico.getLayout());
-				c.show(painelDinamico, "home");
-				
-				CardLayout cc = (CardLayout) (painelDinamico.getLayout());
-				cc.show(painelDinamico, "contaReceber");
-			}
-		});
+		
 		btnLogar.setBounds(255, 197, 89, 23);
 		panel.add(btnLogar);
 		
+		btnLogar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				
+				c.show(painelDinamico, "home");		
+				cc.show(painelConteudoDinamico, "painelInicial");
+			}
+		});
 
 	}
 	
@@ -165,117 +243,209 @@ public class FrmLogin extends JFrame {
 		JPanel painelCabecalhoHome = new JPanel();
 		painelCabecalhoHome.setBorder(new LineBorder(new Color(0, 0, 0)));
 		painelCabecalhoHome.setBackground(Color.WHITE);
-		painelCabecalhoHome.setBounds(0, 0, 679, 52);
+		painelCabecalhoHome.setBounds(0, 0, 864, 52);
 		painelHome.add(painelCabecalhoHome);
 		painelCabecalhoHome.setLayout(null);
 		
+		Label label = new Label("Controle de Fluxo Financeiro");
+		label.setFont(new Font("Dialog", Font.BOLD, 18));
+		label.setBounds(321, 10, 267, 32);
+		painelCabecalhoHome.add(label);
+		
 		JPanel painelMenu = new JPanel();
+		painelMenu.setBorder(new LineBorder(new Color(0, 0, 0)));
 		painelMenu.setBackground(Color.WHITE);
-		painelMenu.setBounds(0, 51, 145, 374);
+		painelMenu.setBounds(0, 51, 145, 386);
 		painelHome.add(painelMenu);
 		painelMenu.setLayout(null);
 		
-		JPanel painelOptUsuario = new JPanel();
-		painelOptUsuario.setBounds(0, 0, 145, 44);
-		painelMenu.add(painelOptUsuario);
-		painelOptUsuario.setBorder(new LineBorder(new Color(0, 0, 0)));
-		painelOptUsuario.setBackground(Color.WHITE);
-		painelOptUsuario.setLayout(null);
+		JPanel painelOptContaReceber = new JPanel();
+		painelOptContaReceber.setLayout(null);
+		painelOptContaReceber.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptContaReceber.setBackground(Color.WHITE);
+		painelOptContaReceber.setBounds(0, 0, 145, 44);
+		painelMenu.add(painelOptContaReceber);
 		
-		JLabel lblUsurio = new JLabel("Usu\u00E1rio");
-		lblUsurio.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblUsurio.setBounds(43, 11, 65, 14);
-		painelOptUsuario.add(lblUsurio);
+		c = (CardLayout) (painelDinamico.getLayout());
+
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel.setBackground(Color.WHITE);
-		panel.setBounds(0, 45, 145, 44);
-		painelMenu.add(panel);
+		painelOptContaReceber.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "contaReceber");
+				
+				iniciarTabela("ContaReceber");
+				super.mouseClicked(e);
+			}
+		});
 		
-		JLabel label = new JLabel("Usu\u00E1rio");
-		label.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		label.setBounds(43, 11, 65, 14);
-		panel.add(label);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setLayout(null);
-		panel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_1.setBackground(Color.WHITE);
-		panel_1.setBounds(0, 91, 145, 44);
-		painelMenu.add(panel_1);
-		
-		JLabel label_1 = new JLabel("Usu\u00E1rio");
-		label_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		label_1.setBounds(43, 11, 65, 14);
-		panel_1.add(label_1);
-		
-		JPanel panel_2 = new JPanel();
-		panel_2.setLayout(null);
-		panel_2.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_2.setBackground(Color.WHITE);
-		panel_2.setBounds(0, 138, 145, 44);
-		painelMenu.add(panel_2);
-		
-		JLabel label_2 = new JLabel("Usu\u00E1rio");
-		label_2.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		label_2.setBounds(43, 11, 65, 14);
-		panel_2.add(label_2);
-		
-		JPanel panel_3 = new JPanel();
-		panel_3.setLayout(null);
-		panel_3.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_3.setBackground(Color.WHITE);
-		panel_3.setBounds(0, 184, 145, 44);
-		painelMenu.add(panel_3);
-		
-		JLabel label_3 = new JLabel("Usu\u00E1rio");
-		label_3.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		label_3.setBounds(43, 11, 65, 14);
-		panel_3.add(label_3);
-		
-		JPanel painelOptContareceber = new JPanel();
-		painelOptContareceber.setLayout(null);
-		painelOptContareceber.setBorder(new LineBorder(new Color(0, 0, 0)));
-		painelOptContareceber.setBackground(Color.WHITE);
-		painelOptContareceber.setBounds(0, 229, 145, 44);
-		painelMenu.add(painelOptContareceber);
 		
 		JLabel lblContasAReceber = new JLabel("Contas a Receber");
 		lblContasAReceber.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblContasAReceber.setBounds(25, 11, 110, 22);
-		painelOptContareceber.add(lblContasAReceber);
+		painelOptContaReceber.add(lblContasAReceber);
 		
-		JPanel panel_5 = new JPanel();
-		panel_5.setLayout(null);
-		panel_5.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_5.setBackground(Color.WHITE);
-		panel_5.setBounds(0, 275, 145, 44);
-		painelMenu.add(panel_5);
+		JPanel painelOptContaPagar = new JPanel();
+		painelOptContaPagar.setLayout(null);
+		painelOptContaPagar.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptContaPagar.setBackground(Color.WHITE);
+		painelOptContaPagar.setBounds(0, 48, 145, 44);
+		painelMenu.add(painelOptContaPagar);
+		
+		painelOptContaPagar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "painelContaPagar");
+				
+				iniciarTabela("ContaPagar");
+				super.mouseClicked(e);
+			}
+		});
 		
 		JLabel lblContasAPagar = new JLabel("Contas a Pagar");
 		lblContasAPagar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		lblContasAPagar.setBounds(25, 11, 110, 22);
-		panel_5.add(lblContasAPagar);
+		painelOptContaPagar.add(lblContasAPagar);
 		
-		JPanel panel_6 = new JPanel();
-		panel_6.setLayout(null);
-		panel_6.setBorder(new LineBorder(new Color(0, 0, 0)));
-		panel_6.setBackground(Color.WHITE);
-		panel_6.setBounds(0, 319, 145, 44);
-		painelMenu.add(panel_6);
+		JPanel painelOptFluxoDeCaixa = new JPanel();
+		painelOptFluxoDeCaixa.setLayout(null);
+		painelOptFluxoDeCaixa.setBorder(new LineBorder(new Color(0, 0, 0)));
+		painelOptFluxoDeCaixa.setBackground(Color.WHITE);
+		painelOptFluxoDeCaixa.setBounds(0, 94, 145, 44);
+		painelMenu.add(painelOptFluxoDeCaixa);
 		
-		JLabel label_6 = new JLabel("Usu\u00E1rio");
-		label_6.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		label_6.setBounds(43, 11, 65, 14);
-		panel_6.add(label_6);
+		painelOptFluxoDeCaixa.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				cc.show(painelConteudoDinamico, "painelFluxoDeCaixa");
+				
+				iniciarTabela("Saida");
+				iniciarTabela("Entrada");
+				super.mouseClicked(e);
+			}
+		});
 		
-		JPanel painelConteudoDinamico = new JPanel();
+		JLabel lblFluxoDeCaixa = new JLabel("Fluxo de Caixa");
+		lblFluxoDeCaixa.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		lblFluxoDeCaixa.setBounds(25, 11, 110, 14);
+		painelOptFluxoDeCaixa.add(lblFluxoDeCaixa);
+		
+		painelConteudoDinamico = new JPanel();
 		painelConteudoDinamico.setBackground(Color.WHITE);
-		painelConteudoDinamico.setBounds(156, 65, 513, 349);
+		painelConteudoDinamico.setBounds(156, 65, 708, 349);
 		painelHome.add(painelConteudoDinamico);
 		painelConteudoDinamico.setLayout(new CardLayout(0, 0));
+		
+		criarPainelContaReceber();
+		
+		//painelContasReceber.add(tblContasReceber);
+		
+		JPanel painelInicial = new JPanel();
+		painelInicial.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelInicial, "painelInicial");
+		painelInicial.setLayout(null);
+		
+		JLabel lblBemVindo = new JLabel("Bem Vindo ao Sistema de Fluxo Financeiro da MobShare");
+		lblBemVindo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblBemVindo.setBounds(195, 88, 386, 14);
+		painelInicial.add(lblBemVindo);
+		
+		criarPainelContaPagar();
+		
+		criarPainelFluxoDeCaixa();
+		
+	}
+	
+	
+	public void criarPainelContaPagar(){
+		
+		JPanel painelContaPagar = new JPanel();
+		painelContaPagar.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelContaPagar, "painelContaPagar");
+		painelContaPagar.setLayout(null);
+		
+		JLabel lblContasAPagar_1 = new JLabel("Contas a Pagar");
+		lblContasAPagar_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblContasAPagar_1.setBounds(37, 11, 191, 14);
+		painelContaPagar.add(lblContasAPagar_1);
+		
+		tblContasPagar = new JTable();
+		tblContasPagar.setBackground(Color.WHITE);
+
+		tblContasPagar.setBounds(37, 71, 425, 195);
+		
+		scrollTabela = new JScrollPane(tblContasPagar);
+		
+		scrollTabela.setVisible(true);
+		scrollTabela.setBounds(140, 56, 425, 195);
+		
+		painelContaPagar.add(scrollTabela);
+		
+		JButton btnPagar = new JButton("Baixar");
+		btnPagar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Boolean result;
+				contaPagar = (ContaPagar) listaContasPagar.get(tblContasPagar.getSelectedRow());
+				
+				contaPagarDAO = new ContaPagarDAO();
+				result = contaPagarDAO.pagarConta(contaPagar.getIdConta_Pagar());
+				
+			
+			}
+		});
+		btnPagar.setBounds(476, 274, 89, 23);
+		painelContaPagar.add(btnPagar);
+		
+		
+	}
+	
+	
+	public void criarPainelFluxoDeCaixa(){
+		
+		painelFluxoDeCaixa = new JPanel();
+		painelFluxoDeCaixa.setBackground(Color.WHITE);
+		painelConteudoDinamico.add(painelFluxoDeCaixa, "painelFluxoDeCaixa");
+		painelFluxoDeCaixa.setLayout(null);
+		
+		JLabel lblContasAReceber_1 = new JLabel("Fluxo de Caixa");
+		lblContasAReceber_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblContasAReceber_1.setBounds(20, 30, 108, 17);
+		painelFluxoDeCaixa.add(lblContasAReceber_1);
+		
+		JLabel lblEntrada = new JLabel("Entrada");
+		lblEntrada.setBounds(20, 70, 46, 14);
+		painelFluxoDeCaixa.add(lblEntrada);
+		
+		JLabel lblSda = new JLabel("Sa\u00EDda");
+		lblSda.setBounds(375, 70, 46, 14);
+		painelFluxoDeCaixa.add(lblSda);
+		
+		
+		
+		tabelaEntrada = new JTable();
+		
+		JScrollPane scrollTabelaEntrada = new JScrollPane(tabelaEntrada);
+		scrollTabelaEntrada.setBounds(20, 95, 323, 170);
+		painelFluxoDeCaixa.add(scrollTabelaEntrada);
+
+		
+		tabelaSaida = new JTable();
+		
+		JScrollPane scrollTabelaSaida = new JScrollPane(tabelaSaida);
+		scrollTabelaSaida.setBounds(375, 95, 323, 170);
+		painelFluxoDeCaixa.add(scrollTabelaSaida);
+
+		
+		
+	}
+	
+	
+	
+	public void criarPainelContaReceber(){
+		cc = (CardLayout) (painelConteudoDinamico.getLayout());
 		
 		JPanel painelContasReceber = new JPanel();
 		painelContasReceber.setBackground(Color.WHITE);
@@ -290,9 +460,27 @@ public class FrmLogin extends JFrame {
 		tblContasReceber = new JTable();
 
 		tblContasReceber.setBounds(37, 71, 425, 195);
-		painelContasReceber.add(tblContasReceber);
 		
+		scrollTabela = new JScrollPane(tblContasReceber);
+		scrollTabela.setVisible(true);
+		scrollTabela.setBounds(154, 68, 425, 195);
 		
-		iniciarTabela("ContaReceber");
+		painelContasReceber.add(scrollTabela);
+		
+		JButton btnReceber = new JButton("Baixar");
+		btnReceber.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Boolean result;
+				contaReceber = (ContaReceber) listaContasReceber.get(tblContasReceber.getSelectedRow());
+				
+				contaReceberDAO = new ContaReceberDAO();
+				result = contaReceberDAO.receberConta(contaReceber.getIdConta_Receber());
+				
+				
+				
+			}
+		});
+		btnReceber.setBounds(490, 275, 89, 23);
+		painelContasReceber.add(btnReceber);
 	}
 }

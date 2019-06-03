@@ -2,9 +2,13 @@ package utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import javax.swing.JScrollPane;
 import javax.swing.table.AbstractTableModel;
 
+import model.ContaPagar;
 import model.ContaReceber;
 
 
@@ -12,15 +16,18 @@ import model.ContaReceber;
 public class GenericTableModel extends AbstractTableModel{
 
 	ArrayList<?> listaObjetos;
-	String[] nomecolunas; 
+	//String[] nomecolunas; 
+	List<String> nomecolunas;
 	String nomeClasse;
+	
+	JScrollPane scrollTabela;
 
 
 	public GenericTableModel(ArrayList<?> listaObjetos , String[] colunas, String nomeClasse){
 		
 		this.listaObjetos = listaObjetos;
-		this.nomecolunas = colunas;
-		
+		//this.nomecolunas = colunas;
+		nomecolunas = Arrays.asList(colunas);
 		this.nomeClasse = nomeClasse;
 		
 	}
@@ -29,7 +36,7 @@ public class GenericTableModel extends AbstractTableModel{
 	@Override
 	public int getColumnCount(){
 		
-		return nomecolunas.length;
+		return nomecolunas.size();
 	}
 
 	@Override
@@ -56,22 +63,20 @@ public class GenericTableModel extends AbstractTableModel{
 			}else if(colunas == 3){
 				return cb.getVencimento();
 			}			
-		}else if(nomeClasse.equals("EQUIPAMENTO")){
-//			
-//			EQUIPAMENTO e = (EQUIPAMENTO) listaObjetos.get(linhas);
-//			
-//			if(colunas ==0 ){
-//				return e.getSERIAL();
-//			}else if(colunas == 1){
-//				return e.getNOME_EQUIPAMENTO();
-//				
-//			}else if(colunas == 2){
-//				return e.getMARCA();
-//			}else if(colunas == 3){
-//				return e.getMODELO();
-//			}else if(colunas == 4){
-//				return e.getFUNCIONANDO();
-//			}
+		}else if(nomeClasse.equals("ContaPagar")){
+
+			ContaPagar cp = (ContaPagar) listaObjetos.get(linhas);
+			
+			if(colunas == 0){
+				return cp.getIdConta_Pagar();
+			}else if(colunas == 1){
+				return cp.getValor();
+			}else if(colunas == 2){
+				return cp.getNomeBanco();
+			}else if(colunas == 3){
+				return cp.getVencimento();
+			}	
+			
 		}
 
 
@@ -87,7 +92,7 @@ public class GenericTableModel extends AbstractTableModel{
 		
 		for(int i = 0; i <= column; i++){
 			if(column == i){
-				return nomecolunas[i];
+				return nomecolunas.get(i);
 			}
 		}
 		
