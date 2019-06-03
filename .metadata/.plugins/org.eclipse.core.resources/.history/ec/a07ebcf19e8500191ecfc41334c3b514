@@ -18,10 +18,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.TitledBorder;
 
-import dao.BancoDAO;
 import dao.ContaPagarDAO;
 import dao.ContaReceberDAO;
-import model.Banco;
 import model.ContaPagar;
 import model.ContaReceber;
 import utils.GenericTableModel;
@@ -35,17 +33,11 @@ import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
 import java.awt.Label;
-
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
 
 public class FrmLogin extends JFrame {
 	
-	JComboBox comboBox;
-	JLabel lblSaldo;
 	
-	BancoDAO bancoDAO;
 
 	CardLayout c;
 	CardLayout cc;
@@ -445,34 +437,12 @@ public class FrmLogin extends JFrame {
 		JScrollPane scrollTabelaSaida = new JScrollPane(tabelaSaida);
 		scrollTabelaSaida.setBounds(375, 95, 323, 170);
 		painelFluxoDeCaixa.add(scrollTabelaSaida);
+
 		
-
-
-		//criarBanco();
 		
 	}
 	
-//	public void criarBanco(){
-//		comboBox = new JComboBox();
-//		comboBox.setBounds(30, 318, 78, 20);
-//		painelFluxoDeCaixa.add(comboBox);
-//		
-//		ArrayList<Banco> listBancos = new ArrayList<>();
-//		
-//		bancoDAO = new BancoDAO();
-//		
-//		listBancos  = bancoDAO.listarBancos();
-//		
-//
-//		
-//		JLabel lblSelecioneUmBanco = new JLabel("Selecione um banco para ver seu saldo:");
-//		lblSelecioneUmBanco.setBounds(20, 292, 227, 14);
-//		painelFluxoDeCaixa.add(lblSelecioneUmBanco);
-//		
-//		JLabel lblSaldo = new JLabel("");
-//		lblSaldo.setBounds(136, 321, 46, 14);
-//		painelFluxoDeCaixa.add(lblSaldo);
-//	}
+	
 	
 	public void criarPainelContaReceber(){
 		cc = (CardLayout) (painelConteudoDinamico.getLayout());

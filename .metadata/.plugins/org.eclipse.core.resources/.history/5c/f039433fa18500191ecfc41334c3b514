@@ -16,11 +16,9 @@ public class Conexao {
 			//Class.forName("com.mysql.jdbc.Driver");
 			Class.forName("com.mysql.cj.jdbc.Driver");
 
-			
-			String url = "jdbc:mysql://192.168.1.1:3306/dbmob?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC";
-			//String url = "jdbc:mysql://localhost:3306/mydb?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC";
-//			con =  DriverManager.getConnection(url, "root", "bcd127");
-			con =  DriverManager.getConnection(url, "mob", "kliss123");
+
+			String url = "jdbc:mysql://localhost:3306/mydb?autoReconnect=true&useSSL=false&useTimezone=true&serverTimezone=UTC";
+			con =  DriverManager.getConnection(url, "root", "bcd127");
 			System.out.print("Conectado");
 		}catch(Exception e){
 			System.out.println("Houve um erro na conexao com o banco");
